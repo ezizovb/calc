@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор процентов</title>
+
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --card: #1a1a1a;
+            --input: #111;
+            --border: #333;
+            --text-muted: #aaa;
+            --accent: #4caf50;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: #fff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        /* ОБЁРТКА */
+        .page {
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+        }
+
+        /* КАРТОЧКА */
+        .calculator {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        h2 {
+            margin: 0 0 18px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        input,
+        select {
+            width: 95%;
+            margin-top: 6px;
+            padding: 12px;
+            background: var(--input);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .result {
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .percent {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .text {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .formula {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* 📱 МОБИЛКИ */
+        @media (max-width: 600px) {
+            .page {
+                align-items: center;
+                padding: 6px;
+            }
+
+            .calculator {
+                max-width: 100%;
+                border-radius: 12px;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="calculator">
+        <h2>Калькулятор процентов</h2>
+
+        <label>Первое число</label>
+        <input type="number" id="a" value="10">
+
+        <label>Второе число</label>
+        <input type="number" id="b" value="7">
+
+        <label>Округлить до</label>
+        <select id="round">
+            <option value="0">0 знаков</option>
+            <option value="1">1 знак</option>
+            <option value="2" selected>2 знака</option>
+            <option value="3">3 знака</option>
+        </select>
+
+        <div class="result">
+            <div class="percent" id="result">—</div>
+            <div class="text" id="description"></div>
+            <div class="formula">(A / B × 100) − 100</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const aInput = document.getElementById('a');
+    const bInput = document.getElementById('b');
+    const roundSelect = document.getElementById('round');
+    const resultEl = document.getElementById('result');
+    const descEl = document.getElementById('description');
+
+    function calculate() {
+        const a = parseFloat(aInput.value);
+        const b = parseFloat(bInput.value);
+        const round = parseInt(roundSelect.value);
+
+        if (isNaN(a) || isNaN(b) || b === 0) {
+            resultEl.textContent = '—';
+            descEl.textContent = '';
+            return;
+        }
+
+        const percent = ((a / b) * 100 - 100).toFixed(round);
+
+        resultEl.textContent = percent + ' %';
+        descEl.textContent = `${a} больше чем ${b} на ${percent}%`;
+    }
+
+    aInput.addEventListener('input', calculate);
+    bInput.addEventListener('input', calculate);
+    roundSelect.addEventListener('change', calculate);
+
+    calculate();
+</script>
+
+</body>
+</html>
